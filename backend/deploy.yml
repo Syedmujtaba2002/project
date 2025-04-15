@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  labels:
+    app: backend
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: 970547374143.dkr.ecr.us-east-1.amazonaws.com/backend:2
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+spec:
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+      #nodePort: 31005  # Optional: Specify a #nodePort if you want a fixed port
+  selector:
+    app: backend  # Ensure this matches the labels in the Deployment
+  type: LoadBalancer
